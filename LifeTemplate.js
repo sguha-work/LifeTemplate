@@ -14,36 +14,55 @@ var LifeTemplate = {
         $("#" + this.containerDivId).html(templateString);
         this.pasteTemplateInTemplateContainer(templateString);
         this.mainData = data;
-        this.renderTemplate(templateString, data);
+        return this.renderTemplate(templateString, data);
     },
     renderTemplate : function(templateString, data) {
         var containerObject = $("#" + this.containerDivId);
         //finding and executing loop data process
-        if($(" [if-data-loop]",containerObject).length !=0 ) {
-            var selfObject = this;
-            $(" [if-data-loop]",containerObject).each(function() {
-                var templateString = $(this).html();
-                var data           = $(this).attr('if-data-loop');
-                selfObject.renderLoop(templateString, data);
-            });
-        }
-        if($(" [if-data]",containerObject).length) {
-            var index = 0;
-            $("#" + this.containerDivId+" > [if-data]").each(function() {
-                index+=1;
-            });
-            alert(index);    
-        }
+       this.renderLoop(templateString, data);
+        this.outputHTML = $("#" + this.containerDivId).html();alert(this.outputHTML)
+        this.deleteOtherContainerDiv();
+        return this.outputHTML;
     },
     /**
     * This function executes the loop ( the repeting data )
     */
     renderLoop : function(templateString, data) {
-        console.log(templateString);
-        console.log(this.mainData[data]);
-        for( var index in this.mainData[data]) {
-            
+        var containerObject = $("#" + this.containerDivId)[0];
+         if($(" [if-data-loop]",containerObject).length !=0 ) {
+            var selfObject = this;
+            $(" [if-data-loop]",containerObject).each(function() {
+                var templateString = $(this).html();
+                var dataString     = $(this).attr('if-data-loop');
+                selfObject.renderLoopIndividual(templateString, dataString, this);
+            });
+         }
+    },
+    renderLoopIndividual : function(templateString, dataString, element) {
+        var data = this.getDataFromDataString(dataString);
+        var outputString = "";
+        for(var index in data) {
+            outputString += templateString;
         }
+        $(element).html(outputString);
+        $(element).removeAttr('if-data-loop');
+    },
+    getDataFromDataString : function(attributeName) {
+        var keys = Object.keys(this.mainData);
+        if(keys.indexOf(attributeName)!= -1) {
+         return (this.mainData[attributeName]);
+        }    
+        else {
+           for(var index in keys) {
+             prevData = mainData;
+             return getValue(attributeName, this.mainData[keys[index]]);
+           }
+        }
+    
+    },    
+    
+    logError : function(errorMessage) {
+        console.log("Error : "+errorMessage);
     },
     /**
     * This function paste the given template string to template
