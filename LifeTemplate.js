@@ -19,7 +19,7 @@ var LifeTemplate = {
     renderTemplate : function(templateString, data) {
         var containerObject = $("#" + this.containerDivId);
         //finding and executing loop data process
-       this.renderLoop(templateString, data);
+       this.renderLoop(templateString);
         this.outputHTML = $("#" + this.containerDivId).html();alert(this.outputHTML)
         this.deleteOtherContainerDiv();
         return this.outputHTML;
@@ -27,7 +27,7 @@ var LifeTemplate = {
     /**
     * This function executes the loop ( the repeting data )
     */
-    renderLoop : function(templateString, data) {
+    renderLoop : function(templateString) {
         var containerObject = $("#" + this.containerDivId)[0];
          if($(" [if-data-loop]",containerObject).length !=0 ) {
             var selfObject = this;
@@ -37,6 +37,9 @@ var LifeTemplate = {
                 selfObject.renderLoopIndividual(templateString, dataString, this);
             });
          }
+        else {
+            return true;
+        }
     },
     renderLoopIndividual : function(templateString, dataString, element) {
         var data = this.getDataFromDataString(dataString);
@@ -46,6 +49,7 @@ var LifeTemplate = {
         }
         $(element).html(outputString);
         $(element).removeAttr('if-data-loop');
+        this.renderLoop($("#" + this.containerDivId).html());
     },
     getDataFromDataString : function(attributeName) {
         var keys = Object.keys(this.mainData);
