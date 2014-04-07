@@ -1,34 +1,25 @@
 <html>
 	<head>
 		<script type="text/template" id="template">
-    <ul if-data-loop="students">
-        <li print-data="name"></li>
+    <ul>
+        <li print-data="students.name.fname, students.name.lname">first name ## last name ##</li>
     </ul>
-    <!--<table if-data="students">
-        <tr>
-            <td print-data="name"></td>
-            <td>
-                <table if-data="address">
-                    <td print-data="address1"></td>
-                </table>
-            </td>
-        </tr>
-    </table>
-    <div if-no-data="students">No data found</div>-->
+   
+    
 </script> 
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="LifeTemplate.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-    var data = new Array();
-    data.push({name:"arindam"});
-    data.push({name:"shyamal"});
-    data.push({name:"arghya"});
-    data.push({name:"santanu"});
-    data.push({name:"aritrik"});
+    var data = {name:{fname:"arindam",lname:"karmakar"}};//new Array();
+    //data.push({name:{fname:"arindam",lname:"karmakar"}});
+    // data.push({name:{fname:"shyamal",lname:"saha"}});
+    // data.push({name:{fname:"arghya",lname:"majumder"}});
+    // data.push({name:{fname:"santanu",lname:"dhar"}});
+    // data.push({name:{fname:"aritrik",lname:"das"}});
     var studentData = {
         students : data
-    };
+    };console.log(studentData);
     $("#main").html(LifeTemplate.render($("#template").html(), studentData));
 });
 </script>

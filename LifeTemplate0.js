@@ -20,7 +20,12 @@ var LifeTemplate = {
         var containerObject = $("#" + this.containerDivId);
         //finding and executing loop data process
         if($(" [if-data-loop]",containerObject).length !=0 ) {
-            this.renderLoop();    
+            var selfObject = this;
+            $(" [if-data-loop]",containerObject).each(function() {
+                var templateString = $(this).html();
+                var dataString           = $(this).attr('if-data-loop');
+                selfObject.renderLoop(templateString, dataString);
+            });
         }
         if($(" [if-data]",containerObject).length) {
             var index = 0;
@@ -57,17 +62,18 @@ var LifeTemplate = {
     /**
     * This function executes the loop ( the repeting data )
     */
-    renderLoop : function() {
-        if($(" [if-data-loop]",containerObject).length != 0) {
-            $(" [if-data-loop]",containerObject).first().html(this.renderLoopIndividual($(" [if-data-loop]",containerObject).first().html(), $(" [if-data-loop]",containerObject).first().attr('if-data-loop')));
+    renderLoop : function(templateString, dataString) {
+        console.log(templateString);
+        console.log(this.mainData[dataString]);
+        var data = this.mainData[dataString];
+        if(data instanceof Array) {
+            for( var index in this.mainData[data]) {
+                
+            }    
         }
         else {
-            return false;
+            this.logError(data +" is not an array");
         }
-        
-    },
-
-    renderLoopIndividual : function(templateString, dataString) {
         
     },
     /**
