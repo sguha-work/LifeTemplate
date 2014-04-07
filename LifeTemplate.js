@@ -19,16 +19,40 @@ var LifeTemplate = {
     renderTemplate : function(templateString, data) {
         var containerObject = $("#" + this.containerDivId);
         //finding and executing loop data process
+<<<<<<< HEAD
         if($(" [if-data-loop]",containerObject).length !=0 ) {
             this.renderLoop();    
-        }
-        if($(" [if-data]",containerObject).length) {
-            var index = 0;
-            $("#" + this.containerDivId+" > [if-data]").each(function() {
-                index+=1;
+=======
+       this.renderLoop(templateString);
+        this.outputHTML = $("#" + this.containerDivId).html();alert(this.outputHTML)
+        this.deleteOtherContainerDiv();
+        return this.outputHTML;
+    },
+    /**
+    * This function executes the loop ( the repeting data )
+    */
+    renderLoop : function(templateString) {
+        var containerObject = $("#" + this.containerDivId)[0];
+         if($(" [if-data-loop]",containerObject).length !=0 ) {
+            var selfObject = this;
+            $(" [if-data-loop]",containerObject).each(function() {
+                var templateString = $(this).html();
+                var dataString     = $(this).attr('if-data-loop');
+                selfObject.renderLoopIndividual(templateString, dataString, this);
             });
-            alert(index);    
+         }
+        else {
+            return true;
+>>>>>>> 4e57a83c3051bdc95b598b1f69b74de8c859c6d3
         }
+    },
+    renderLoopIndividual : function(templateString, dataString, element) {
+        var data = this.getDataFromDataString(dataString);
+        var outputString = "";
+        for(var index in data) {
+            outputString += templateString;
+        }
+<<<<<<< HEAD
         if($(" [print-data]",containerObject).length) {
             var selfObject = this;
             $(" [print-data]",containerObject).each(function(){
@@ -94,6 +118,26 @@ var LifeTemplate = {
             return data;
         }
     },
+=======
+        $(element).html(outputString);
+        $(element).removeAttr('if-data-loop');
+        this.renderLoop($("#" + this.containerDivId).html());
+    },
+    getDataFromDataString : function(attributeName) {
+        var keys = Object.keys(this.mainData);
+        if(keys.indexOf(attributeName)!= -1) {
+         return (this.mainData[attributeName]);
+        }    
+        else {
+           for(var index in keys) {
+             prevData = mainData;
+             return getValue(attributeName, this.mainData[keys[index]]);
+           }
+        }
+    
+    },    
+    
+>>>>>>> 4e57a83c3051bdc95b598b1f69b74de8c859c6d3
     logError : function(errorMessage) {
         console.log("Error : "+errorMessage);
     },
